@@ -29,9 +29,8 @@ def generate(prompt: str, topic: str):
     image1 = Image.open(
         "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/penrose_stairway.png"
     )
-    image2 = types.Part.from_uri(
-        file_uri="gs://cloud-samples-data/generative-ai/image/suitcase.png",
-        mime_type="image/png",
+    image2 = Image.open(
+        "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/penrose_stairway.png"
     )
     image3 = types.Part.from_uri(
         file_uri="gs://cloud-samples-data/generative-ai/image/armchair.png",
@@ -64,9 +63,11 @@ def generate(prompt: str, topic: str):
             ],
         ),
     ]
+
     tools = [
         types.Tool(googleSearch=types.GoogleSearch()),
     ]
+
     generate_content_config = types.GenerateContentConfig(
         temperature=1,
         top_p=0.95,
@@ -126,7 +127,7 @@ def generate(prompt: str, topic: str):
     #         print(chunk.text, end="")
 
     response = client.models.generate_content(
-        model="gemini-3-pro-image-preview",
+        model=model,
         contents=[prompt, image1],
         config=types.GenerateContentConfig(response_modalities=["Image"]),
     )
@@ -149,7 +150,9 @@ def generate(prompt: str, topic: str):
 if __name__ == "__main__":
     topic = "penrose"
 
-    prompt = """A high-detailed modern Penrose stairway optical illusion."""
+    prompt = """A high-detailed LSD style drawing of the Penrose stairs optical illusion, similar to the image1. A continuous, infinite loop of green pipes steps arranged instead of squares. Mario-related figures are walking endlessly along those stairs upwards in a clockwise direction with tiny mushrooms scattered along the way. Isometric perspective, impossible geometry, paradoxical architecture in the more modern style of M.C. Escher, intricate line work, high contrast."""
+
+    # prompt = """A high-detailed Penrose stairway optical illusion based on image1."""
 
     # FAILED
     # prompt = """A high-detailed modern Penrose stairway optical illusion."""
