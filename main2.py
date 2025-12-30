@@ -1,9 +1,11 @@
 import base64
 import mimetypes
 import os
+import numpy as np
 from google import genai
 from google.genai import types
 from PIL import Image
+import tifffile
 
 
 def save_binary_file(file_name, data):
@@ -29,9 +31,22 @@ def generate(prompt: str, topic: str):
     image1 = Image.open(
         "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/penrose_stairway.png"
     )
+    # image2 = Image.open(
+    #     "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/escher_waterfall.png"
+    # )
+    # image2 = tifffile.TiffFile(
+    #     "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/test.tif"
+    # )
     image2 = Image.open(
-        "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/escher_waterfall.png"
+        "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/test2.tif"
     )
+    # Convert 16-bit grayscale to 8-bit for API compatibility
+    if image2.mode == "I;16":
+        arr = np.array(image2, dtype=np.uint16)
+        arr = (arr / 256).astype(np.uint8)
+        image2 = Image.fromarray(arr, mode="L")
+    elif image2.mode == "I":
+        image2 = image2.convert("L")
 
     output_folder = "output"
     os.makedirs(output_folder, exist_ok=True)
@@ -47,7 +62,7 @@ def generate(prompt: str, topic: str):
             max_output_tokens=32768,
             response_modalities=["Image"],
             image_config=types.ImageConfig(
-                aspect_ratio="9:16",
+                aspect_ratio="21:9",
                 image_size="1K",
                 output_mime_type="image/png",
             ),
@@ -72,7 +87,7 @@ def generate(prompt: str, topic: str):
 if __name__ == "__main__":
     topic = "waterfall"
 
-    prompt = """A high-detailed surreal LSD-style modified version of M.C. Escher's "Waterfall". A foamy aqueduct carries water in a zigzag path that appears to flow constantly uphill around corners, yet the water ends up three stories higher than where it started. The water falls from the top level onto a plastic bubble waterwheel, which drives the flow back into the bottom of the impossible channel. Bubbly texture, impossible architecture, isometric perspective, non-Euclidean geometry."""
+    prompt = """This is an x-ray image through a piece of metal that has titanium particles, which has higher absorbsion and therefore should be black blobs or dots. Increase image quality by removing noises overall."""
     
     # prompt = """A detailed lithograph drawing in the LSD version of M.C. Escher's "Waterfall". A stone aqueduct carries water in a zigzag path that appears to flow constantly downhill around corners, yet the water ends up two stories higher than where it started. The water falls from the top level onto a wooden waterwheel, which drives the flow back into the bottom of the impossible channel. Cross-hatching texture, impossible architecture, isometric perspective, non-Euclidean geometry."""
 

@@ -1,4 +1,7 @@
 Observation:
-- AI detect that this is a squint test but does not find out who / what is behind the background in Ronaldo case.
 - gemini-2.5-flash-image works best with up to 3 images as input, while gemini-3-pro-image-preview supports 5 images with high fidelity, and up to 14 images in total.
 - Generating Penrose stairway illusion will definitely failed with the presense of "modern" in prompt.
+- AI detect that this is a squint test but does not find out who / what is behind the background.
+    1. Did not work at the beginning in Gemini web app, with biases it worked (even though in a separate thread, they shared information)
+    2. Did not work then using API, hallucinated.
+    3. Activated thinking mode with 1024 and still did not work.
