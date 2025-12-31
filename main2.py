@@ -1,11 +1,12 @@
 import base64
 import mimetypes
 import os
+
 import numpy as np
+import tifffile
 from google import genai
 from google.genai import types
 from PIL import Image
-import tifffile
 
 
 def save_binary_file(file_name, data):
@@ -28,17 +29,8 @@ def generate(prompt: str, topic: str):
     model = "gemini-3-pro-image-preview"
     # model = "imagen-4.0-generate-001"
 
-    image1 = Image.open(
-        "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/penrose_stairway.png"
-    )
-    # image2 = Image.open(
-    #     "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/escher_waterfall.png"
-    # )
-    # image2 = tifffile.TiffFile(
-    #     "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/test.tif"
-    # )
     image2 = Image.open(
-        "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/test2.tif"
+        "C:/Users/Admin/Documents/Workbench/Computational Visual Perception/projects/2/ref/escher_waterfall.png"
     )
     # Convert 16-bit grayscale to 8-bit for API compatibility
     if image2.mode == "I;16":
@@ -62,7 +54,7 @@ def generate(prompt: str, topic: str):
             max_output_tokens=32768,
             response_modalities=["Image"],
             image_config=types.ImageConfig(
-                aspect_ratio="21:9",
+                aspect_ratio="2:3",
                 image_size="1K",
                 output_mime_type="image/png",
             ),
@@ -87,8 +79,12 @@ def generate(prompt: str, topic: str):
 if __name__ == "__main__":
     topic = "waterfall"
 
-    prompt = """This is an x-ray image through a piece of metal that has titanium particles, which has higher absorbsion and therefore should be black blobs or dots. Increase image quality by removing noises overall."""
-    
+    # Enhanced depth cues
+    prompt = """A photorealistic CGI rendering of the Waterfall optical illusion, maintaining the exact geometry of image2. An ancient stone aqueduct carries rushing, transparent water that appears to flow uphill before crashing down onto a wet wooden water wheel. Strong, dramatic directional sunlight casts deep, realistic shadows that emphasize volumetric form and depth on the stone pillars. Realistic textures of wet mossy stone, splashing water physics, and atmospheric haze."""
+
+    # Reduced depth cues
+    # prompt = """A minimalist, flat line-art drawing of the Escher's Waterfall optical illusion, maintaining the exact geometry of image2. The aqueduct, flowing water, and water wheel are rendered only as simple black outlines on a plain white background. No shading, no shadows, no stone texture, no water ripples, uniform line weight throughout. The structure appears as a technical blueprint or wireframe model rather than a solid object."""
+
     # prompt = """A detailed lithograph drawing in the LSD version of M.C. Escher's "Waterfall". A stone aqueduct carries water in a zigzag path that appears to flow constantly downhill around corners, yet the water ends up two stories higher than where it started. The water falls from the top level onto a wooden waterwheel, which drives the flow back into the bottom of the impossible channel. Cross-hatching texture, impossible architecture, isometric perspective, non-Euclidean geometry."""
 
     # prompt = """A detailed lithograph drawing in the cartoon style of M.C. Escher's "Waterfall". A stone aqueduct carries water in a zigzag path that appears to flow constantly downhill around corners, yet the water ends up two stories higher than where it started. The water falls from the top level onto a wooden waterwheel, which drives the flow back into the bottom of the impossible channel. Cross-hatching texture, impossible architecture, isometric perspective, non-Euclidean geometry."""
